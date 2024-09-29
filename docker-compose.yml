@@ -1,0 +1,38 @@
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    environment:
+      - JAVA_OPTS=-Dotel.javaagent.enabled=false
+    healthcheck:
+      test: curl -s http://localhost:4444/status | grep '"ready":true' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  chromium-node:
+    image: selenium/node-chromium:latest
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - JAVA_OPTS=-Dotel.javaagent.enabled=false
+    volumes:
+      - /dev/shm:/dev/shm
+
+  cucumber-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      selenium-hub:
+        condition: service_started  # Temporarily changed
+      chromium-node:
+        condition: service_started
+    volumes:
+      - .:/app
+      - ./target:/app/target
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444/wd/hub
+      - CUCUMBER_OPTIONS=${CUCUMBER_OPTIONS}
