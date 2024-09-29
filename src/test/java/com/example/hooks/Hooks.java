@@ -31,7 +31,7 @@ public class Hooks {
                 System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
                 return new ChromeDriver();
             } catch (Exception e) {
-                throw new RuntimeException("Failed to initialize EdgeDriver: " + e.getMessage(), e);
+                throw new RuntimeException("Failed to initialize Chrome Driver: " + e.getMessage(), e);
             }
         }
     }
