@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class InvoiceFormPage {
     private final WebDriver driver;
@@ -27,6 +28,7 @@ public class InvoiceFormPage {
     private final By itemNameInput = By.id("itemName0");
     private final By itemQuantityInput = By.id("itemQuantity0");
     private final By itemPriceInput = By.id("itemPrice0");
+    private final By paymentTermsSelect = By.id("paymentTerms");
 
     private final By addItemButton = By.className("save");
     private final By discardButton = By.className("discard");
@@ -59,8 +61,9 @@ public class InvoiceFormPage {
 
         driver.findElement(invoiceDateInput).sendKeys(invoiceDate);
         driver.findElement(descriptionInput).sendKeys(description);
-        WebElement dropdown = driver.findElement(By.id("paymentTerms"));
-        dropdown.findElement(By.xpath("//option[. = 'Net 1 Day']")).click();
+        Select paymentTerm = new Select(driver.findElement(paymentTermsSelect));
+        paymentTerm.selectByVisibleText("Net 1 Day");
+
     }
 
     // Method to add an item to the invoice

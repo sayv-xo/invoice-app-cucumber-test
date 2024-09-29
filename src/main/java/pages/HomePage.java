@@ -28,4 +28,7 @@ public class HomePage {
         return driver.findElement(By.tagName("html")).getAttribute("data-theme");
     }
 
+    public void createInvoice() {
+        driver.findElement(By.cssSelector(".create")).click();
+    }
 }
